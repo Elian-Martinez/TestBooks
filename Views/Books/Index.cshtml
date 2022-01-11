@@ -1,0 +1,83 @@
+﻿@model TestBooks.Models.BooksViewModel
+@{
+    ViewData["Title"] = "Estudiantes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="text-center">
+                    @if (Model.Books != null && Model.Book.BookId > 0)
+                    {
+
+                        <h3>Modificar Libros</h3>
+                    }
+                    else
+                    {
+                        <h3>Agregar Libros</h3>
+                    }
+
+                    <hr>
+                    <form asp-action="Index" asp-controller="Books" asp-route-id="" method="POST">
+                        <input type="hidden" asp-for="Book.BookId">
+                        <div class="form-group">
+                            <input type="text" asp-for="Book.BookName" class="form-control" placeholder="Título Libro">
+                        </div>
+                        <div class="form-group">
+                            <input type="number" asp-for="Book.Description" class="form-control" placeholder="Descripción">
+                        </div>
+                        <div class="form-group">
+                            <input type="number" asp-for="Book.Author" class="form-control" placeholder="Author">
+                        </div>
+                        <div class="form-group">
+                            <input type="date" asp-for="Book.PublishDate" class="form-control" placeholder="Fecha de Publicación">
+                        </div>
+                        <button type="submit" class="btn btn-block btn-outline-danger">Guardar cambios</button>
+                        @if (!string.IsNullOrEmpty(ViewBag.Error))
+                        {
+                            <span class="text-danger">@ViewBag.Error</span>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="text-center">
+                    <h3>Listado de Libros Registrados</h3>
+                    <hr>
+                    <table class="table table-responsive table-hover">
+                        <thead>
+                            <tr>
+                                <td>Titulo Libro</td>
+                                <td>Descripcion</td>
+                                <td>Author</td>
+                                <td>Fecha de Publicacion</td>
+                                <td>Acciones</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var Book in Model.Books)
+                            {
+                                <tr>
+                                    <td>@Book.BookName</td>
+                                    <td>@Book.Description</td>
+                                    <td>@Book.Author</td>
+                                    <td>@Book.PublishDate.ToString("dd/MM/yyyy")</td>
+                                    <td>
+                                        <a class="text-warning" asp-action="Index" asp-controller="Books" asp-route-id="@Book.BookId" asp-route-isDelete="false">Editar</a> |
+                                        <a class="text-danger" asp-action="Index" asp-controller="Books" asp-route-id="@Book.BookId" asp-route-isDelete="true">Eliminar</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
